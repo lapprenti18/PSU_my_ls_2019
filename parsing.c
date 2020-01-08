@@ -46,7 +46,7 @@ int file_and_error_l(char **av, int a, struct stat size_buff)
     return (2);
 }
 
-void total_l(char **av, int a)
+int total_l(char **av, int a)
 {
     char *name;
     DIR *dp;
@@ -54,7 +54,6 @@ void total_l(char **av, int a)
     int calc = 0;
     struct stat size_buff;
 
-    write(1, "total ", 6);
     dp = opendir(av[a]);
     while ((dr = readdir(dp)) != NULL) {
         name = dr->d_name;
@@ -63,7 +62,7 @@ void total_l(char **av, int a)
             calc += size_buff.st_blocks;
         }
     }
-    my_put_nbr(calc/2, 0, 1);
+    return (calc/2);
 }
 
 int print_permission_all_arg(int ac, char **av)
@@ -75,22 +74,10 @@ int print_permission_all_arg(int ac, char **av)
     int test;
     int error = 0;
     int calc = 0;
+    int jsp = 0;
+    int total;
+    int boool = 0;
 
-    // for (int a = 2; a != ac; a += 1) {
-    //     write(1, "total ", 6);
-    //     test = lstat(av[a], &size_buff);
-    //     if (test > 0) {
-    //         dp = opendir(av[a]);
-    //         while (test == 2 && (dr = readdir(dp)) != NULL) {
-    //             if (av[a][0] != '.') {
-    //                 lstat(av[a], &size_buff);
-    //                 printf("%d\n", size_buff.st_blocks);
-    //                 calc += size_buff.st_blocks;
-    //             }
-    //         }
-    //     }
-    // }
-    // my_put_nbr(calc/2, 0, 1);
     for (int a = 2; a != ac; a += 1) {
         test = file_and_error_l(av, a, size_buff);
         if (test == 1)
@@ -98,23 +85,35 @@ int print_permission_all_arg(int ac, char **av)
         if (test != 1)
             dp = opendir(av[a]);
         if (dp) {
-            // total_l(av, a);
-            write(1, "total 4 \n", 9);
+            total = total_l(av, a);
             while (test != 1 && (dr = readdir(dp)) != NULL) {
                 name = cat(av[a], dr->d_name);
                 if (dr->d_name[0] != '.') {
-                    lstat(name, &size_buff);
-                    // rwx(size_buff.st_mode);
-                    write(1, "-rw-r--r-- ", 11);
+                    if (lstat(name, &size_buff) < 0) {
+                        jsp = 1;
+                        break;
+                    }
+                    if (boool == 0) {
+                        write(1, "total ", 6);
+                        my_put_nbr(total, 0, 1);
+                        boool += 1;
+                    }
+                    rwx(size_buff.st_mode);
                     the_rest(size_buff, name);
+                    my_putstr(dr->d_name, 0, 1);
                 }
             }
         }
-        if (!dp && test != 1) {
+        boool = 1;
+        if (!dp && test != 1 || jsp == 1) {
             lstat(av[a], &size_buff);
             rwx(size_buff.st_mode);
             the_rest(size_buff, av[a]);
+            my_putstr(dr->d_name, 0, 1);
         }
+        jsp = 0;
+        if (a + 1 < ac)
+            write(1, "\n", 1);
     }
     return (error);
 }

@@ -43,8 +43,7 @@ void the_rest(struct stat size_buff, char *name)
     struct group *groupe;
     char *str = malloc(sizeof(char) * 25);
 
-    // my_put_nbr(size_buff.st_nlink, 1, 0);
-    write(1, "1 ", 2);
+    my_put_nbr(size_buff.st_nlink, 1, 0);
     user = getpwuid(size_buff.st_uid);
     my_putstr(user->pw_name, 1, 0);
     groupe = getgrgid(size_buff.st_gid);
@@ -53,7 +52,6 @@ void the_rest(struct stat size_buff, char *name)
     str = ctime(&size_buff.st_mtime);
     str = date(str);
     my_putstr(str, 1, 0);
-    my_putstr(name, 0, 1);
 }
 
 void rwx(int size_buff)
