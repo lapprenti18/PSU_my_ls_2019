@@ -32,21 +32,21 @@ int print_permission_all_arg(int ac, char **av)
     int error = 0;
     int calc = 0;
 
-    for (int a = 2; a != ac; a += 1) {
-        write(1, "total ", 6);
-        test = lstat(av[a], &size_buff);
-        if (test > 0) {
-            dp = opendir(av[a]);
-            while (test == 2 && (dr = readdir(dp)) != NULL) {
-                if (av[a][0] != '.') {
-                    lstat(av[a], &size_buff);
-                    printf("%d\n", size_buff.st_blocks);
-                    calc += size_buff.st_blocks;
-                }
-            }
-        }
-    }
-    my_put_nbr(calc/2, 0, 1);
+    // for (int a = 2; a != ac; a += 1) {
+    //     write(1, "total ", 6);
+    //     test = lstat(av[a], &size_buff);
+    //     if (test > 0) {
+    //         dp = opendir(av[a]);
+    //         while (test == 2 && (dr = readdir(dp)) != NULL) {
+    //             if (av[a][0] != '.') {
+    //                 lstat(av[a], &size_buff);
+    //                 printf("%d\n", size_buff.st_blocks);
+    //                 calc += size_buff.st_blocks;
+    //             }
+    //         }
+    //     }
+    // }
+    // my_put_nbr(calc/2, 0, 1);
     for (int a = 2; a != ac; a += 1) {
         test = file_and_error_l(av, a, size_buff);
         if (test == 1)
