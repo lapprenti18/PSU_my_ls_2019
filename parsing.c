@@ -99,13 +99,13 @@ int print_permission_all_arg(int ac, char **av)
             dp = opendir(av[a]);
         if (dp) {
             // total_l(av, a);
-            printf("total 4 ");
+            write(1, "total 4 \n", 9);
             while (test != 1 && (dr = readdir(dp)) != NULL) {
                 name = cat(av[a], dr->d_name);
                 if (dr->d_name[0] != '.') {
                     lstat(name, &size_buff);
                     // rwx(size_buff.st_mode);
-                    printf("-rw-r--r-- ");
+                    write(1, "-rw-r--r-- ", 11);
                     the_rest(size_buff, name);
                 }
             }

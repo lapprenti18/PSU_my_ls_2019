@@ -44,7 +44,7 @@ void the_rest(struct stat size_buff, char *name)
     char *str = malloc(sizeof(char) * 25);
 
     // my_put_nbr(size_buff.st_nlink, 1, 0);
-    printf("1 ");
+    write(1, "1 ", 2);
     user = getpwuid(size_buff.st_uid);
     my_putstr(user->pw_name, 1, 0);
     groupe = getgrgid(size_buff.st_gid);
