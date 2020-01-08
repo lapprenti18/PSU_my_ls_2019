@@ -14,14 +14,16 @@ void   my_putchar12(char c)
     write(1, &c, 1);
 }
 
-int    my_putstr(char const *str)
+void    my_putstr(char *str, int space, int slash)
 {
-    int i;
+    int i = 0;
 
-    i = 0;
     while (str[i] != '\0'){
         my_putchar12(str[i]);
         i++;
     }
-    return (0);
+    if (space == 1)
+        write(1, " ", 1);
+    if (slash == 1)
+        write(1, "\n", 1);
 }

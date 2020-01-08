@@ -30,45 +30,44 @@ void print_permission(int ac, char **av)
     int total = 0;
 
     dp = opendir(".");
-    write(1, "total ", 6);
-    if ((dr = readdir(dp)) != NULL) {
-        name = dr->d_name;
-        lstat(name, &size_buff);
-        my_put_nbr(size_buff.st_blocks);
-        write(1, "\n", 1);
-    }
     while ((dr = readdir(dp)) != NULL) {
         name = dr->d_name;
         if (name[0] != '.') {
             lstat(name, &size_buff);
-            my_putstr( (S_ISDIR(size_buff.st_mode)) ? "d" : "-");
-            my_putstr( (size_buff.st_mode & S_IRUSR) ? "r" : "-");
-            my_putstr( (size_buff.st_mode & S_IWUSR) ? "w" : "-");
-            my_putstr( (size_buff.st_mode & S_IXUSR) ? "x" : "-");
-            my_putstr( (size_buff.st_mode & S_IRGRP) ? "r" : "-");
-            my_putstr( (size_buff.st_mode & S_IWGRP) ? "w" : "-");
-            my_putstr( (size_buff.st_mode & S_IXGRP) ? "x" : "-");
-            my_putstr( (size_buff.st_mode & S_IROTH) ? "r" : "-");
-            my_putstr( (size_buff.st_mode & S_IWOTH) ? "w" : "-");
-            my_putstr( (size_buff.st_mode & S_IXOTH) ? "x" : "-");
-            write(1, " ", 1);
+            total += size_buff.st_blocks;
+        }
+    }
+    dp = opendir(".");
+    write(1, "total ", 6);
+    my_put_nbr(total);
+    write(1, "\n", 1);
+    while ((dr = readdir(dp)) != NULL) {
+        name = dr->d_name;
+        if (name[0] != '.') {
+            lstat(name, &size_buff);
+            my_putstr( (S_ISDIR(size_buff.st_mode)) ? "d" : "-", 0, 0);
+            my_putstr( (size_buff.st_mode & S_IRUSR) ? "r" : "-", 0, 0);
+            my_putstr( (size_buff.st_mode & S_IWUSR) ? "w" : "-", 0, 0);
+            my_putstr( (size_buff.st_mode & S_IXUSR) ? "x" : "-", 0, 0);
+            my_putstr( (size_buff.st_mode & S_IRGRP) ? "r" : "-", 0, 0);
+            my_putstr( (size_buff.st_mode & S_IWGRP) ? "w" : "-", 0, 0);
+            my_putstr( (size_buff.st_mode & S_IXGRP) ? "x" : "-", 0, 0);
+            my_putstr( (size_buff.st_mode & S_IROTH) ? "r" : "-", 0, 0);
+            my_putstr( (size_buff.st_mode & S_IWOTH) ? "w" : "-", 0, 0);
+            my_putstr( (size_buff.st_mode & S_IXOTH) ? "x" : "-", 1, 0);
             my_put_nbr(size_buff.st_nlink);
             write(1, " ", 1);
             user = getpwuid(size_buff.st_uid);
-            my_putstr(user->pw_name);
-            write(1, " ", 1);
+            my_putstr(user->pw_name, 1, 0);
             groupe = getgrgid(size_buff.st_gid);
-            my_putstr(groupe->gr_name);
-            write(1, " ", 1);
+            my_putstr(groupe->gr_name, 1, 0);
             my_put_nbr(size_buff.st_size);
             write(1, " ", 1);
             str = ctime(&size_buff.st_mtime);
             str = date(str);
-            my_putstr(str);
-            write(1, " ", 1);
+            my_putstr(str, 1, 0);
             dr = readdir(dp);
-            my_putstr(name);
-            write (1, "\n", 1);
+            my_putstr(name, 0, 1);
         }
     }
 }

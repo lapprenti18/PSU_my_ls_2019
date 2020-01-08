@@ -15,10 +15,8 @@ void just_ls(void)
 
     while ((dr = readdir(dp)) != NULL) {
         str = dr->d_name;
-        if (str[0] != '.') {
-            my_putstr(str);
-            write (1, "\n", 1);
-        }
+        if (str[0] != '.')
+            my_putstr(str, 0, 1);
     }
 }
 
@@ -32,10 +30,8 @@ void ls_directory(int ac, char **av)
         dp = opendir(av[a]);
         while ((dr = readdir(dp)) != NULL) {
             str = dr->d_name;
-            if (str[0] != '.') {
-                my_putstr(str);
-                write (1, "\n", 1);
-            }
+            if (str[0] != '.')
+                my_putstr(str, 0, 1);
         }
         if (a + 1 < ac)
             write(1, "\n", 1);
