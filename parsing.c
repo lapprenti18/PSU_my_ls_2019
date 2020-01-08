@@ -84,7 +84,7 @@ int print_permission_all_arg(int ac, char **av)
             error = 84;
         if (test != 1)
             dp = opendir(av[a]);
-        if (dp) {
+        if (dp && test != 1) {
             total = total_l(av, a);
             while (test != 1 && (dr = readdir(dp)) != NULL) {
                 name = cat(av[a], dr->d_name);
@@ -104,12 +104,13 @@ int print_permission_all_arg(int ac, char **av)
                 }
             }
         }
-        boool = 1;
+        boool = 0;
         if (!dp && test != 1 || jsp == 1) {
             lstat(av[a], &size_buff);
             rwx(size_buff.st_mode);
             the_rest(size_buff, av[a]);
             my_putstr(dr->d_name, 0, 1);
+        // printf("test = %d  jsp = %d\n", test, jsp);
         }
         jsp = 0;
         if (a + 1 < ac)
