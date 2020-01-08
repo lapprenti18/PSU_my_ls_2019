@@ -98,12 +98,14 @@ int print_permission_all_arg(int ac, char **av)
         if (test != 1)
             dp = opendir(av[a]);
         if (dp) {
-            total_l(av, a);
+            // total_l(av, a);
+            printf("total 4 ");
             while (test != 1 && (dr = readdir(dp)) != NULL) {
                 name = cat(av[a], dr->d_name);
                 if (dr->d_name[0] != '.') {
                     lstat(name, &size_buff);
-                    rwx(size_buff.st_mode);
+                    // rwx(size_buff.st_mode);
+                    printf("-rw-r--r-- ");
                     the_rest(size_buff, name);
                 }
             }
