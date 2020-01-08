@@ -20,20 +20,47 @@ void just_ls(void)
     }
 }
 
-void ls_directory(int ac, char **av)
+int file_and_error(char **av, int a, struct stat size_buff)
+{
+    if (lstat(av[a], &size_buff) == 0) {
+        my_putstr(av[a], 0, 1);
+        return (0);
+    }
+    else if (lstat(av[a], &size_buff) == -1) {
+        perror("Error");
+        return (1);
+    }
+    return (2);
+}
+
+void print(DIR *dp, struct dirent *dr, int test)
+{
+    char *str;
+
+    while (test == 2 && (dr = readdir(dp)) != NULL) {
+        str = dr->d_name;
+        if (str[0] != '.')
+            my_putstr(str, 0, 1);
+    }
+}
+
+int ls_directory(int ac, char **av)
 {
     DIR *dp;
     struct dirent *dr;
-    char *str;
+    struct stat size_buff;
+    int error = 0;
+    int test = 0;
 
     for (int a = 1; a != ac; a += 1) {
-        dp = opendir(av[a]);
-        while ((dr = readdir(dp)) != NULL) {
-            str = dr->d_name;
-            if (str[0] != '.')
-                my_putstr(str, 0, 1);
-        }
+        test = file_and_error(av, a, size_buff);
+        if (test == 1)
+            error = 84;
+        if (test != 2)
+            dp = opendir(av[a]);
+        print(dp, dr, test);
         if (a + 1 < ac)
             write(1, "\n", 1);
     }
+    return (error);
 }

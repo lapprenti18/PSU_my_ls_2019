@@ -12,7 +12,7 @@ void    my_putchar(char c)
     write (1, &c, 1);
 }
 
-int    my_limit_int(int nb)
+void    my_limit_int(void)
 {
     my_putchar('-');
     my_putchar('2');
@@ -25,13 +25,13 @@ int    my_limit_int(int nb)
     my_putchar('6');
     my_putchar('4');
     my_putchar('8');
-    return (0);
+    return;
 }
 
 void    my_put_nbr(int nb, int space, int slash)
 {
     if (nb == (-2147483648)) {
-        my_limit_int(nb);
+        my_limit_int();
         return;
     }
     if (nb <0){

@@ -10,6 +10,7 @@ SRC	=	main.c	\
 		parsing.c	\
 		my_putstr.c	\
 		my_put_nbr.c	\
+		ls_l_no_arg.c	\
 
 NAME	=	my_ls
 

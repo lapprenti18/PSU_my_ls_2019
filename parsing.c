@@ -7,83 +7,74 @@
 
 #include "my.h"
 
-char *date(char *str)
+int file_and_error_l(char **av, int a, struct stat size_buff)
 {
-    char *date = malloc(sizeof(char) * 13);
-
-    date[12] = '\0';
-    for (int a = 4; a < 16; a += 1)
-        date[a - 4] = str[a];
-    return (date);
+    if (lstat(av[a], &size_buff) == 0) {
+        lstat(av[a], &size_buff);
+        rwx(size_buff.st_mode);
+        the_rest(size_buff, av[a]);
+        return (0);
+    }
+    else if (lstat(av[a], &size_buff) == -1) {
+        perror("Error");
+        return (1);
+    }
+    return (2);
 }
 
-void print_permission(int ac, char **av)
+int print_permission_all_arg(int ac, char **av)
 {
     struct stat size_buff;
-    struct passwd *user;
-    struct group *groupe;
-    struct time_t *time;
-    char *str = malloc(sizeof(char) * 25);
-    char *name;
     DIR *dp;
     struct dirent *dr;
-    int total = 0;
+    char *name;
+    int test;
+    int error = 0;
+    int calc = 0;
 
-    dp = opendir(".");
-    while ((dr = readdir(dp)) != NULL) {
-        name = dr->d_name;
-        if (name[0] != '.') {
-            lstat(name, &size_buff);
-            total += size_buff.st_blocks;
+    for (int a = 2; a != ac; a += 1) {
+        write(1, "total ", 6);
+        test = lstat(av[a], &size_buff);
+        if (test > 0) {
+            dp = opendir(av[a]);
+            while (test == 2 && (dr = readdir(dp)) != NULL) {
+                if (av[a][0] != '.') {
+                    lstat(av[a], &size_buff);
+                    printf("%d\n", size_buff.st_blocks);
+                    calc += size_buff.st_blocks;
+                }
+            }
         }
     }
-    dp = opendir(".");
-    write(1, "total ", 6);
-    my_put_nbr(total, 0, 1);
-    while ((dr = readdir(dp)) != NULL) {
-        name = dr->d_name;
-        if (name[0] != '.') {
-            lstat(name, &size_buff);
-            my_putstr( (S_ISDIR(size_buff.st_mode)) ? "d" : "-", 0, 0);
-            my_putstr( (size_buff.st_mode & S_IRUSR) ? "r" : "-", 0, 0);
-            my_putstr( (size_buff.st_mode & S_IWUSR) ? "w" : "-", 0, 0);
-            my_putstr( (size_buff.st_mode & S_IXUSR) ? "x" : "-", 0, 0);
-            my_putstr( (size_buff.st_mode & S_IRGRP) ? "r" : "-", 0, 0);
-            my_putstr( (size_buff.st_mode & S_IWGRP) ? "w" : "-", 0, 0);
-            my_putstr( (size_buff.st_mode & S_IXGRP) ? "x" : "-", 0, 0);
-            my_putstr( (size_buff.st_mode & S_IROTH) ? "r" : "-", 0, 0);
-            my_putstr( (size_buff.st_mode & S_IWOTH) ? "w" : "-", 0, 0);
-            my_putstr( (size_buff.st_mode & S_IXOTH) ? "x" : "-", 1, 0);
-            my_put_nbr(size_buff.st_nlink, 1, 0);
-            user = getpwuid(size_buff.st_uid);
-            my_putstr(user->pw_name, 1, 0);
-            groupe = getgrgid(size_buff.st_gid);
-            my_putstr(groupe->gr_name, 1, 0);
-            my_put_nbr(size_buff.st_size, 1, 0);
-            str = ctime(&size_buff.st_mtime);
-            str = date(str);
-            my_putstr(str, 1, 0);
-            dr = readdir(dp);
-            my_putstr(name, 0, 1);
+    my_put_nbr(calc/2, 0, 1);
+    for (int a = 2; a != ac; a += 1) {
+        test = file_and_error_l(av, a, size_buff);
+        if (test == 1)
+            error = 84;
+        dp = opendir(av[a]);
+        while (test == 2 && (dr = readdir(dp)) != NULL) {
+            name = dr->d_name;
+            if (name[0] != '.') {
+                lstat(name, &size_buff);
+                rwx(size_buff.st_mode);
+                the_rest(size_buff, name);
+            }
         }
     }
+    return (error);
 }
 
-void ls_with_l(int ac, char **av)
+int ls_with_l(int ac, char **av)
 {
-    if (ac == 2) {
-        print_permission(ac, av);
-        return;
-    // } else {
-    // }
-
-    }
+    if (ac == 2)
+        return (print_permission(ac, av));
+    else
+        return (print_permission_all_arg(ac, av));
 }
 
-void parsing(int ac, char **av)
+int parsing(int ac, char **av)
 {
     if (av[1][1] == 'l' && av[1][2] == '\0') {
-        ls_with_l(ac, av);
-        return;
+        return (ls_with_l(ac, av));
     }
 }

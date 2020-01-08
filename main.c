@@ -13,11 +13,10 @@ int main(int ac, char **av)
         just_ls();
         return (0);
     }
-    if (av[1][0] != '-') {
-        ls_directory(ac, av);
-        return (0);
-    } else {
-        parsing(ac, av);
+    if (av[1][0] != '-')
+        return (ls_directory(ac, av));
+    else {
+        return(parsing(ac, av));
     }
     return (0);
 }

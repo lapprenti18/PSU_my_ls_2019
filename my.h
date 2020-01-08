@@ -19,7 +19,12 @@
 #include <pwd.h>
 
 void just_ls(void);
-void ls_directory(int ac, char **av);
-void parsing(int ac, char **av);
-void    my_putstr(char *str, int space, int slash);
-void    my_put_nbr(int nb, int space, int slash);
+int ls_directory(int ac, char **av);
+int parsing(int ac, char **av);
+void my_putstr(char *str, int space, int slash);
+void my_put_nbr(int nb, int space, int slash);
+int print_permission(int ac, char **av);
+void rwx(int size_buff);
+void the_rest(struct stat size_buff, char *name);
+void total(void);
+char *date(char *str);
