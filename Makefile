@@ -25,7 +25,7 @@ ERROR	=	-Wall -W -Wextra
 all	:	$(OBJ)
 
 $(OBJ)	:
-	gcc -o $(NAME) $(SRC) $(ERROR)
+	gcc -o $(NAME) $(SRC) $(ERROR) $(VG)
 
 clean	:
 	rm -f *.o $(OBJ)

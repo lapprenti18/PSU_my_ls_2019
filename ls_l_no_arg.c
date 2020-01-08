@@ -85,7 +85,7 @@ int print_permission(int ac, char **av)
         name = dr->d_name;
         if (name[0] != '.') {
             lstat(name, &size_buff);
-            rwx(size_buff.st_mode);
+            rwx((int)size_buff.st_mode);
             the_rest(size_buff, name);
         }
     }
