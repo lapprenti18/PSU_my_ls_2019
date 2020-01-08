@@ -22,4 +22,4 @@ void just_ls(void);
 void ls_directory(int ac, char **av);
 void parsing(int ac, char **av);
 void    my_putstr(char *str, int space, int slash);
-int    my_put_nbr(int nb);
+void    my_put_nbr(int nb, int space, int slash);

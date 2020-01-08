@@ -28,11 +28,11 @@ int    my_limit_int(int nb)
     return (0);
 }
 
-int    my_put_nbr(int nb)
+void    my_put_nbr(int nb, int space, int slash)
 {
     if (nb == (-2147483648)) {
         my_limit_int(nb);
-        return (0);
+        return;
     }
     if (nb <0){
         my_putchar('-');
@@ -40,10 +40,13 @@ int    my_put_nbr(int nb)
     }
 
     if (nb >= 10) {
-        my_put_nbr(nb/10);
+        my_put_nbr(nb/10, 0, 0);
         my_putchar(nb % 10 + '0');
     } else {
         my_putchar(nb + '0');
     }
-    return (0);
+    if (space == 1)
+        write(1, " ", 1);
+    if (slash == 1)
+        write(1, "\n", 1);
 }

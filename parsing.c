@@ -39,8 +39,7 @@ void print_permission(int ac, char **av)
     }
     dp = opendir(".");
     write(1, "total ", 6);
-    my_put_nbr(total);
-    write(1, "\n", 1);
+    my_put_nbr(total, 0, 1);
     while ((dr = readdir(dp)) != NULL) {
         name = dr->d_name;
         if (name[0] != '.') {
@@ -55,14 +54,12 @@ void print_permission(int ac, char **av)
             my_putstr( (size_buff.st_mode & S_IROTH) ? "r" : "-", 0, 0);
             my_putstr( (size_buff.st_mode & S_IWOTH) ? "w" : "-", 0, 0);
             my_putstr( (size_buff.st_mode & S_IXOTH) ? "x" : "-", 1, 0);
-            my_put_nbr(size_buff.st_nlink);
-            write(1, " ", 1);
+            my_put_nbr(size_buff.st_nlink, 1, 0);
             user = getpwuid(size_buff.st_uid);
             my_putstr(user->pw_name, 1, 0);
             groupe = getgrgid(size_buff.st_gid);
             my_putstr(groupe->gr_name, 1, 0);
-            my_put_nbr(size_buff.st_size);
-            write(1, " ", 1);
+            my_put_nbr(size_buff.st_size, 1, 0);
             str = ctime(&size_buff.st_mtime);
             str = date(str);
             my_putstr(str, 1, 0);
