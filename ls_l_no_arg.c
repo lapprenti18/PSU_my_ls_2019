@@ -86,6 +86,7 @@ int print_permission(int ac, char **av)
             lstat(name, &size_buff);
             rwx((int)size_buff.st_mode);
             the_rest(size_buff, name);
+            my_putstr(dr->d_name, 0, 1);
         }
     }
     return (0);

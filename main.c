@@ -16,7 +16,7 @@ int main(int ac, char **av)
     if (av[1][0] != '-')
         return (ls_directory(ac, av));
     else {
-        return(parsing(ac, av));
+        return (parsing(ac, av));
     }
     return (0);
 }

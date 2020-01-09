@@ -24,13 +24,20 @@ char *cat(char *start, char *line)
     int length_start = my_strlen(start);
     int length_line = my_strlen(line);
     char *reslt = NULL;
-    
-    reslt = malloc(sizeof(char) * (length_start + length_line + 1));
-    for (int a = 0; a < length_start; a += 1)
+    int a = 0;
+
+    reslt = malloc(sizeof(char) * (length_start + length_line + 2));
+    for (; a < length_start; a += 1)
         reslt[a] = start[a];
-    for (int a = 0; a < length_line; a += 1)
-        reslt[a + length_start] = line[a];
-    reslt[length_start + length_line] = '\0';
+    if (reslt[a - 1] != '/') {
+        reslt[a] = '/';
+        a += 1;
+    }
+    for (int b = 0; b < length_line; b += 1) {
+        reslt[a] = line[b];
+        a += 1;
+    }
+    reslt[a] = '\0';
     return (reslt);
 }
 
@@ -110,11 +117,11 @@ int print_permission_all_arg(int ac, char **av)
             rwx(size_buff.st_mode);
             the_rest(size_buff, av[a]);
             my_putstr(dr->d_name, 0, 1);
-        // printf("test = %d  jsp = %d\n", test, jsp);
         }
         jsp = 0;
-        if (a + 1 < ac)
+        if (a + 1 < ac) {
             write(1, "\n", 1);
+        }
     }
     return (error);
 }
