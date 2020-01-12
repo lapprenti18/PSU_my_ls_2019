@@ -7,40 +7,6 @@
 
 #include "my.h"
 
-int my_strlen(char *str)
-{
-    int length = 0;
-
-    if (str == NULL)
-        return (0);
-    while (str[length] != '\0') {
-        length += 1;
-    }
-    return (length);
-}
-
-char *cat(char *start, char *line)
-{
-    int length_start = my_strlen(start);
-    int length_line = my_strlen(line);
-    char *reslt = NULL;
-    int a = 0;
-
-    reslt = malloc(sizeof(char) * (length_start + length_line + 2));
-    for (; a < length_start; a += 1)
-        reslt[a] = start[a];
-    if (reslt[a - 1] != '/') {
-        reslt[a] = '/';
-        a += 1;
-    }
-    for (int b = 0; b < length_line; b += 1) {
-        reslt[a] = line[b];
-        a += 1;
-    }
-    reslt[a] = '\0';
-    return (reslt);
-}
-
 int file_and_error_l(char **av, int a, struct stat size_buff)
 {
     if (lstat(av[a], &size_buff) == 0) {
@@ -100,28 +66,18 @@ int print_permission_all_arg(int ac, char **av)
                         jsp = 1;
                         break;
                     }
-                    if (boool == 0) {
-                        write(1, "total ", 6);
-                        my_put_nbr(total, 0, 1);
-                        boool += 1;
-                    }
-                    rwx(size_buff.st_mode);
-                    the_rest(size_buff, name);
-                    my_putstr(dr->d_name, 0, 1);
+                    if (boool == 0)
+                        boool = print_tot(boool, total);
+                    reste(size_buff, dr, name);
                 }
             }
         }
         boool = 0;
-        if (!dp && test != 1 || jsp == 1) {
-            lstat(av[a], &size_buff);
-            rwx(size_buff.st_mode);
-            the_rest(size_buff, av[a]);
-            my_putstr(dr->d_name, 0, 1);
-        }
+        if (!dp && test != 1 || jsp == 1)
+            display(av, a, size_buff, dr);
         jsp = 0;
-        if (a + 1 < ac) {
+        if (a + 1 < ac)
             write(1, "\n", 1);
-        }
     }
     return (error);
 }

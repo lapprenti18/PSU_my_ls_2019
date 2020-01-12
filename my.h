@@ -28,3 +28,8 @@ void rwx(int size_buff);
 void the_rest(struct stat size_buff, char *name);
 void total(void);
 char *date(char *str);
+int my_strlen(char *str);
+char *cat(char *start, char *line);
+void display(char **av, int a, struct stat size_buff, struct dirent *dr);
+void reste(struct stat size_buff, struct dirent *dr, char *name);
+int print_tot(int boool, int total);

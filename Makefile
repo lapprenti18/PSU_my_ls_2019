@@ -11,6 +11,8 @@ SRC	=	main.c	\
 		my_putstr.c	\
 		my_put_nbr.c	\
 		ls_l_no_arg.c	\
+		cat.c	\
+		my_strlen.c	\
 
 NAME	=	my_ls
 
